@@ -22,6 +22,7 @@ const navItems = [
   { href: '/people',        icon: Users,           label: 'People',           key: 'people' },
   { href: '/files',         icon: File,            label: 'Files',            key: 'files' },
   { href: '/announcements', icon: Megaphone,       label: 'Announcements',    key: 'announcements' },
+  { href: '/departments',   icon: Building2,       label: 'Departments',      key: 'departments' },
   { href: '/ai',            icon: Bot,             label: 'Office AI',        key: 'ai', highlight: true },
 ];
 

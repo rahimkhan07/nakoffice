@@ -19,6 +19,7 @@ const routeTitles: Record<string, string> = {
   '/people':        'People',
   '/files':         'Files',
   '/announcements': 'Announcements',
+  '/departments':   'Departments',
   '/ai':            'Office AI',
   '/settings':      'Settings',
   '/profile':       'Profile',
