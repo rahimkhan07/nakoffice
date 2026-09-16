@@ -1,12 +1,11 @@
 'use client';
 
+import { useRouter, usePathname } from 'next/navigation';
 import { Search, Bell, Moon, Sun, ChevronDown, Zap } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { useAppStore } from '@/store/app-store';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 const routeTitles: Record<string, string> = {
@@ -25,48 +24,57 @@ const routeTitles: Record<string, string> = {
   '/profile':       'Profile',
   '/admin':         'Admin Panel',
   '/billing':       'Billing',
+  '/help':          'Help & Support',
 };
 
 export function TopBar() {
   const { resolvedTheme, setTheme } = useTheme();
-  const pathname = usePathname();
+  const pathname  = usePathname();
+  const router    = useRouter();
   const {
-    currentUser, company, setSearchOpen, notifications, setNotifPanelOpen, notifPanelOpen,
+    currentUser, company,
+    setSearchOpen,
+    notifications, notifPanelOpen, setNotifPanelOpen,
   } = useAppStore();
 
   const unread = notifications.filter(n => !n.read).length;
 
-  const title = Object.entries(routeTitles).find(([k]) => pathname.startsWith(k))?.[1] ?? 'VirtOffice';
+  const title = Object.entries(routeTitles)
+    .find(([k]) => pathname.startsWith(k))?.[1] ?? 'VirtOffice';
 
   return (
-    <header className="h-14 border-b border-[var(--border)] bg-[var(--bg-elevated)] flex items-center px-4 gap-4 shrink-0">
+    <header className="h-14 border-b border-[var(--border)] bg-[var(--bg-elevated)] flex items-center px-4 gap-3 shrink-0 z-30">
       {/* Page title */}
-      <h1 className="text-base font-semibold text-[var(--text-primary)] mr-auto">{title}</h1>
+      <h1 className="text-sm font-semibold text-[var(--text-primary)] mr-auto truncate">
+        {title}
+      </h1>
 
       {/* Search trigger */}
       <button
         onClick={() => setSearchOpen(true)}
         className={cn(
-          'flex items-center gap-2 px-3 h-9 rounded-lg text-sm',
+          'hidden sm:flex items-center gap-2 px-3 h-8 rounded-lg text-xs',
           'bg-[var(--bg-secondary)] border border-[var(--border)]',
-          'text-[var(--text-muted)] hover:text-[var(--text-primary)]',
-          'transition-colors w-48 lg:w-64'
+          'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-blue-300',
+          'transition-all duration-150 w-44 lg:w-56'
         )}
       >
         <Search className="w-3.5 h-3.5 shrink-0" />
-        <span className="flex-1 text-left text-xs">Search anything…</span>
-        <kbd className="text-[10px] font-mono bg-[var(--bg-tertiary)] px-1.5 py-0.5 rounded border border-[var(--border)] hidden lg:inline">⌘K</kbd>
+        <span className="flex-1 text-left">Search…</span>
+        <kbd className="hidden lg:inline text-[10px] font-mono bg-[var(--bg-tertiary)] px-1.5 py-0.5 rounded border border-[var(--border)]">
+          ⌘K
+        </kbd>
       </button>
 
-      {/* Notifications */}
+      {/* Notification bell */}
       <button
         onClick={() => setNotifPanelOpen(!notifPanelOpen)}
         className="relative p-2 rounded-lg hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
         aria-label={`${unread} unread notifications`}
       >
-        <Bell className="w-4.5 h-4.5" />
+        <Bell className="w-4 h-4" />
         {unread > 0 && (
-          <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
@@ -79,23 +87,28 @@ export function TopBar() {
         aria-label="Toggle theme"
       >
         {resolvedTheme === 'dark'
-          ? <Sun className="w-4 h-4" />
+          ? <Sun  className="w-4 h-4" />
           : <Moon className="w-4 h-4" />
         }
       </button>
 
       {/* Company switcher */}
-      <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors">
+      <button
+        onClick={() => router.push('/settings')}
+        className="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
+      >
         <div className="w-6 h-6 rounded-md bg-blue-600 flex items-center justify-center shrink-0">
           <Zap className="w-3 h-3 text-white" />
         </div>
-        <span className="text-sm font-medium text-[var(--text-primary)] hidden md:block">{company.name}</span>
-        <ChevronDown className="w-3 h-3 text-[var(--text-muted)] hidden md:block" />
+        <span className="text-sm font-medium text-[var(--text-primary)] max-w-[100px] truncate">
+          {company.name}
+        </span>
+        <ChevronDown className="w-3 h-3 text-[var(--text-muted)]" />
       </button>
 
-      {/* User avatar */}
+      {/* User avatar → profile page */}
       {currentUser && (
-        <Link href="/profile" className="shrink-0">
+        <Link href="/profile" className="shrink-0 rounded-full focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
           <Avatar
             name={currentUser.name}
             src={currentUser.avatar}

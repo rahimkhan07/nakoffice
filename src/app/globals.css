@@ -53,46 +53,46 @@
   --radius-3xl: 1.5rem;
 
   /* Shadows (design-system) */
-  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+  --shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
   --shadow-card-hover: 0 4px 16px 0 rgb(0 0 0 / 0.10);
-  --shadow-modal: 0 20px 60px -10px rgb(0 0 0 / 0.25);
+  --shadow-modal:      0 20px 60px -10px rgb(0 0 0 / 0.25);
 }
 
 /* =============================================
-   CSS Custom Properties for dark-mode theming
+   CSS Custom Properties – light / dark mode
    ============================================= */
 :root {
-  --bg-primary:   #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary:  #f1f5f9;
-  --bg-elevated:  #ffffff;
-  --border:       #e2e8f0;
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f8fafc;
+  --bg-tertiary:   #f1f5f9;
+  --bg-elevated:   #ffffff;
+  --border:        #e2e8f0;
   --border-subtle: #f1f5f9;
   --text-primary:  #0f172a;
-  --text-secondary: #475569;
+  --text-secondary:#475569;
   --text-muted:    #94a3b8;
   --sidebar-bg:    #0f172a;
   --sidebar-text:  #cbd5e1;
-  --sidebar-active: #3b82f6;
-  --glass-bg: rgba(255,255,255,0.7);
-  --glass-border: rgba(255,255,255,0.3);
+  --sidebar-active:#3b82f6;
+  --glass-bg:      rgba(255,255,255,0.7);
+  --glass-border:  rgba(255,255,255,0.3);
 }
 
 .dark {
-  --bg-primary:   #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary:  #334155;
-  --bg-elevated:  #1e293b;
-  --border:       #334155;
+  --bg-primary:    #0f172a;
+  --bg-secondary:  #1e293b;
+  --bg-tertiary:   #334155;
+  --bg-elevated:   #1e293b;
+  --border:        #334155;
   --border-subtle: #1e293b;
   --text-primary:  #f1f5f9;
-  --text-secondary: #94a3b8;
+  --text-secondary:#94a3b8;
   --text-muted:    #64748b;
   --sidebar-bg:    #020617;
   --sidebar-text:  #94a3b8;
-  --sidebar-active: #3b82f6;
-  --glass-bg: rgba(15,23,42,0.7);
-  --glass-border: rgba(255,255,255,0.08);
+  --sidebar-active:#3b82f6;
+  --glass-bg:      rgba(15,23,42,0.7);
+  --glass-border:  rgba(255,255,255,0.08);
 }
 
 /* =============================================
@@ -112,12 +112,12 @@ body {
 }
 
 /* =============================================
-   Scrollbar styling
+   Scrollbar
    ============================================= */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+::-webkit-scrollbar            { width: 5px; height: 5px; }
+::-webkit-scrollbar-track      { background: transparent; }
+::-webkit-scrollbar-thumb      { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--text-muted); }
 
 /* =============================================
    Focus ring
@@ -129,7 +129,7 @@ body {
 }
 
 /* =============================================
-   Utility classes (not in Tailwind core)
+   Glass morphism helper
    ============================================= */
 .glass {
   background: var(--glass-bg);
@@ -138,6 +138,9 @@ body {
   border: 1px solid var(--glass-border);
 }
 
+/* =============================================
+   Text gradient
+   ============================================= */
 .text-gradient {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   -webkit-background-clip: text;
@@ -145,10 +148,12 @@ body {
   background-clip: text;
 }
 
+/* =============================================
+   Animations
+   ============================================= */
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
-
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-8px); }
@@ -157,14 +162,15 @@ body {
 .animate-pulse-ring {
   animation: pulse-ring 2s ease-out infinite;
 }
-
 @keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
-  70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
-  100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  0%   { box-shadow: 0 0 0 0   rgba(59,130,246,0.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(59,130,246,0);   }
 }
 
-/* Virtual office map grid */
+/* =============================================
+   Virtual office – subtle dot grid
+   ============================================= */
 .office-grid {
   background-image:
     linear-gradient(var(--border) 1px, transparent 1px),
@@ -172,5 +178,50 @@ body {
   background-size: 40px 40px;
 }
 
-/* Kanban column drag-over highlight */
-.kanban-over { ring: 2px; ring-color: #3b82f6; }
+/* =============================================
+   Kanban drag-over ring  (valid plain CSS)
+   ============================================= */
+.kanban-over {
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* =============================================
+   Toggle switch  (used in settings)
+   ============================================= */
+.toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 2.5rem;   /* 40 px */
+  height: 1.375rem; /* 22 px */
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle-track-on  { background-color: #3b82f6; }
+.toggle-track-off { background-color: var(--bg-tertiary); border: 1px solid var(--border); }
+
+.toggle-knob {
+  position: absolute;
+  top: 0.1875rem;   /* 3 px */
+  left: 0.1875rem;
+  width: 1rem;      /* 16 px */
+  height: 1rem;
+  border-radius: 9999px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.toggle-knob-on  { transform: translateX(1.125rem); /* 18 px */ }
+.toggle-knob-off { transform: translateX(0); }
+
+/* =============================================
+   Card hover lift
+   ============================================= */
+.card-hover {
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.card-hover:hover {
+  box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.12);
+  transform: translateY(-2px);
+}

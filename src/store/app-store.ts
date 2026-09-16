@@ -15,44 +15,48 @@ import {
 } from '@/data/demo';
 
 interface AppState {
-  // ─── Auth ─────────────────────────────────────
+  // ─── Auth ────────────────────────────────────
   currentUser: User | null;
   isAuthenticated: boolean;
   setCurrentUser: (user: User | null) => void;
   login: (userId: string) => void;
   logout: () => void;
 
-  // ─── Company ──────────────────────────────────
+  // ─── Company ─────────────────────────────────
   company: Company;
   setCompany: (company: Company) => void;
+  updateCompany: (updates: Partial<Company>) => void;
 
-  // ─── Users ────────────────────────────────────
+  // ─── Users ───────────────────────────────────
   users: User[];
   updateUserStatus: (userId: string, status: User['status']) => void;
   updateUserPosition: (userId: string, position: { x: number; y: number }) => void;
+  updateCurrentUser: (updates: Partial<User>) => void;
 
-  // ─── Departments ──────────────────────────────
+  // ─── Departments ─────────────────────────────
   departments: Department[];
   addDepartment: (dept: Department) => void;
+  deleteDepartment: (id: string) => void;
 
-  // ─── Projects ─────────────────────────────────
+  // ─── Projects ────────────────────────────────
   projects: Project[];
   addProject: (project: Project) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
 
-  // ─── Tasks ────────────────────────────────────
+  // ─── Tasks ───────────────────────────────────
   tasks: Task[];
   addTask: (task: Task) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   moveTask: (taskId: string, newStatus: Task['status']) => void;
 
-  // ─── Meetings ─────────────────────────────────
+  // ─── Meetings ────────────────────────────────
   meetings: Meeting[];
   addMeeting: (meeting: Meeting) => void;
+  deleteMeeting: (id: string) => void;
 
-  // ─── Chat ─────────────────────────────────────
+  // ─── Chat ────────────────────────────────────
   channels: Channel[];
   messages: Message[];
   activeChannelId: string;
@@ -60,30 +64,37 @@ interface AppState {
   sendMessage: (message: Message) => void;
   addReaction: (messageId: string, emoji: string, userId: string) => void;
   markChannelRead: (channelId: string) => void;
+  addChannel: (channel: Channel) => void;
 
-  // ─── Files ────────────────────────────────────
+  // ─── Files ───────────────────────────────────
   files: FileItem[];
   addFile: (file: FileItem) => void;
+  deleteFile: (id: string) => void;
+  renameFile: (id: string, name: string) => void;
 
-  // ─── Notifications ────────────────────────────
+  // ─── Notifications ───────────────────────────
   notifications: Notification[];
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
   addNotification: (notif: Notification) => void;
   unreadNotificationCount: () => number;
 
-  // ─── Announcements ────────────────────────────
+  // ─── Announcements ───────────────────────────
   announcements: Announcement[];
+  addAnnouncement: (ann: Announcement) => void;
+  deleteAnnouncement: (id: string) => void;
 
-  // ─── Calendar ─────────────────────────────────
+  // ─── Calendar ────────────────────────────────
   calendarEvents: CalendarEvent[];
   addCalendarEvent: (event: CalendarEvent) => void;
+  deleteCalendarEvent: (id: string) => void;
 
-  // ─── Virtual Office ───────────────────────────
+  // ─── Virtual Office ──────────────────────────
   virtualRooms: VirtualRoom[];
   activityLog: ActivityLog[];
+  addActivityLog: (log: ActivityLog) => void;
 
-  // ─── UI State ─────────────────────────────────
+  // ─── UI State ────────────────────────────────
   sidebarOpen: boolean;
   toggleSidebar: () => void;
   searchOpen: boolean;
@@ -97,7 +108,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      // ─── Auth ─────────────────────────────────────
+      // ─── Auth ────────────────────────────────────
       currentUser: demoUsers[0],
       isAuthenticated: true,
       setCurrentUser: (user) => set({ currentUser: user }),
@@ -107,35 +118,48 @@ export const useAppStore = create<AppState>()(
       },
       logout: () => set({ currentUser: null, isAuthenticated: false }),
 
-      // ─── Company ──────────────────────────────────
+      // ─── Company ─────────────────────────────────
       company: demoCompany,
       setCompany: (company) => set({ company }),
+      updateCompany: (updates) =>
+        set(s => ({ company: { ...s.company, ...updates } })),
 
-      // ─── Users ────────────────────────────────────
+      // ─── Users ───────────────────────────────────
       users: demoUsers,
       updateUserStatus: (userId, status) =>
         set(s => ({
           users: s.users.map(u => u.id === userId ? { ...u, status } : u),
           currentUser: s.currentUser?.id === userId
-            ? { ...s.currentUser, status } : s.currentUser,
+            ? { ...s.currentUser, status }
+            : s.currentUser,
         })),
       updateUserPosition: (userId, position) =>
         set(s => ({
           users: s.users.map(u => u.id === userId ? { ...u, position } : u),
         })),
+      updateCurrentUser: (updates) =>
+        set(s => {
+          if (!s.currentUser) return s;
+          const updated = { ...s.currentUser, ...updates };
+          return {
+            currentUser: updated,
+            users: s.users.map(u => u.id === updated.id ? updated : u),
+          };
+        }),
 
-      // ─── Departments ──────────────────────────────
+      // ─── Departments ─────────────────────────────
       departments: demoDepartments,
       addDepartment: (dept) => set(s => ({ departments: [...s.departments, dept] })),
+      deleteDepartment: (id) => set(s => ({ departments: s.departments.filter(d => d.id !== id) })),
 
-      // ─── Projects ─────────────────────────────────
+      // ─── Projects ────────────────────────────────
       projects: demoProjects,
       addProject: (project) => set(s => ({ projects: [project, ...s.projects] })),
       updateProject: (id, updates) =>
         set(s => ({ projects: s.projects.map(p => p.id === id ? { ...p, ...updates } : p) })),
       deleteProject: (id) => set(s => ({ projects: s.projects.filter(p => p.id !== id) })),
 
-      // ─── Tasks ────────────────────────────────────
+      // ─── Tasks ───────────────────────────────────
       tasks: demoTasks,
       addTask: (task) => set(s => ({ tasks: [task, ...s.tasks] })),
       updateTask: (id, updates) =>
@@ -144,15 +168,18 @@ export const useAppStore = create<AppState>()(
       moveTask: (taskId, newStatus) =>
         set(s => ({
           tasks: s.tasks.map(t =>
-            t.id === taskId ? { ...t, status: newStatus, updatedAt: new Date().toISOString() } : t
+            t.id === taskId
+              ? { ...t, status: newStatus, updatedAt: new Date().toISOString() }
+              : t
           ),
         })),
 
-      // ─── Meetings ─────────────────────────────────
+      // ─── Meetings ────────────────────────────────
       meetings: demoMeetings,
       addMeeting: (meeting) => set(s => ({ meetings: [meeting, ...s.meetings] })),
+      deleteMeeting: (id) => set(s => ({ meetings: s.meetings.filter(m => m.id !== id) })),
 
-      // ─── Chat ─────────────────────────────────────
+      // ─── Chat ────────────────────────────────────
       channels: demoChannels,
       messages: demoMessages,
       activeChannelId: 'chan-1',
@@ -164,15 +191,18 @@ export const useAppStore = create<AppState>()(
             c.id === message.channelId ? { ...c, lastMessage: message } : c
           ),
         })),
+      // ✅ Fixed: use filter instead of splice to maintain immutability
       addReaction: (messageId, emoji, userId) =>
         set(s => ({
           messages: s.messages.map(m => {
             if (m.id !== messageId) return m;
-            const reactions = { ...m.reactions };
-            if (!reactions[emoji]) reactions[emoji] = [];
-            const idx = reactions[emoji].indexOf(userId);
-            if (idx > -1) reactions[emoji].splice(idx, 1);
-            else reactions[emoji].push(userId);
+            const reactions = { ...(m.reactions ?? {}) };
+            const existing = reactions[emoji] ?? [];
+            if (existing.includes(userId)) {
+              reactions[emoji] = existing.filter(id => id !== userId);
+            } else {
+              reactions[emoji] = [...existing, userId];
+            }
             return { ...m, reactions };
           }),
         })),
@@ -182,12 +212,17 @@ export const useAppStore = create<AppState>()(
             c.id === channelId ? { ...c, unreadCount: 0 } : c
           ),
         })),
+      addChannel: (channel) =>
+        set(s => ({ channels: [channel, ...s.channels] })),
 
-      // ─── Files ────────────────────────────────────
+      // ─── Files ───────────────────────────────────
       files: demoFiles,
       addFile: (file) => set(s => ({ files: [file, ...s.files] })),
+      deleteFile: (id) => set(s => ({ files: s.files.filter(f => f.id !== id) })),
+      renameFile: (id, name) =>
+        set(s => ({ files: s.files.map(f => f.id === id ? { ...f, name } : f) })),
 
-      // ─── Notifications ────────────────────────────
+      // ─── Notifications ───────────────────────────
       notifications: demoNotifications,
       markNotificationRead: (id) =>
         set(s => ({
@@ -200,19 +235,27 @@ export const useAppStore = create<AppState>()(
       unreadNotificationCount: () =>
         get().notifications.filter(n => !n.read).length,
 
-      // ─── Announcements ────────────────────────────
+      // ─── Announcements ───────────────────────────
       announcements: demoAnnouncements,
+      addAnnouncement: (ann) =>
+        set(s => ({ announcements: [ann, ...s.announcements] })),
+      deleteAnnouncement: (id) =>
+        set(s => ({ announcements: s.announcements.filter(a => a.id !== id) })),
 
-      // ─── Calendar ─────────────────────────────────
+      // ─── Calendar ────────────────────────────────
       calendarEvents: demoCalendarEvents,
       addCalendarEvent: (event) =>
         set(s => ({ calendarEvents: [...s.calendarEvents, event] })),
+      deleteCalendarEvent: (id) =>
+        set(s => ({ calendarEvents: s.calendarEvents.filter(e => e.id !== id) })),
 
-      // ─── Virtual Office ───────────────────────────
+      // ─── Virtual Office ──────────────────────────
       virtualRooms: demoVirtualRooms,
       activityLog: demoActivityLog,
+      addActivityLog: (log) =>
+        set(s => ({ activityLog: [log, ...s.activityLog] })),
 
-      // ─── UI ───────────────────────────────────────
+      // ─── UI ──────────────────────────────────────
       sidebarOpen: true,
       toggleSidebar: () => set(s => ({ sidebarOpen: !s.sidebarOpen })),
       searchOpen: false,
