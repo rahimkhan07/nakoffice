@@ -122,7 +122,7 @@ function NewProjectModal({ open, onClose }: { open: boolean; onClose: () => void
 }
 
 export function ProjectsPage() {
-  const { projects, users } = useAppStore();
+  const { projects, users, initialized, loading } = useAppStore();
   const [view, setView] = useState<View>('grid');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -136,6 +136,31 @@ export function ProjectsPage() {
   });
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
+
+  // ── Loading skeleton ──────────────────────────────────────────
+  if (!initialized || loading) {
+    return (
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="h-6 w-36 rounded-lg bg-[var(--bg-secondary)] animate-pulse mb-2" />
+            <div className="h-4 w-48 rounded-lg bg-[var(--bg-secondary)] animate-pulse" />
+          </div>
+          <div className="h-9 w-32 rounded-lg bg-[var(--bg-secondary)] animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {[1,2,3,4,5,6].map(i => (
+            <div key={i} className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 space-y-3">
+              <div className="h-1.5 w-full rounded-full bg-[var(--bg-secondary)] animate-pulse" />
+              <div className="h-5 w-48 rounded-lg bg-[var(--bg-secondary)] animate-pulse" />
+              <div className="h-4 w-32 rounded-lg bg-[var(--bg-secondary)] animate-pulse" />
+              <div className="h-3 w-full rounded-full bg-[var(--bg-secondary)] animate-pulse mt-4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (selectedProjectId && selectedProject) {
     return (

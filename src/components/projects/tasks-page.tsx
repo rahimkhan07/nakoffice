@@ -54,7 +54,7 @@ function TaskRow({ task }: { task: Task }) {
 }
 
 export function TasksPage() {
-  const { tasks, projects, users, currentUser, addTask } = useAppStore();
+  const { tasks, projects, users, currentUser, addTask, initialized, loading } = useAppStore();
   const [search, setSearch] = useState('');
   const [statusF, setStatusF] = useState('');
   const [priorityF, setPriorityF] = useState('');
@@ -139,12 +139,12 @@ export function TasksPage() {
         </select>
       </div>
 
-      <GroupSection label="Urgent" items={grouped.urgent} color="#ef4444" />
+      <GroupSection label="Urgent"      items={grouped.urgent}      color="#ef4444" />
       <GroupSection label="In Progress" items={grouped.in_progress} color="#3b82f6" />
-      <GroupSection label="To Do" items={grouped.todo} color="#94a3b8" />
-      <GroupSection label="In Review" items={grouped.review} color="#8b5cf6" />
-      <GroupSection label="Done" items={grouped.done} color="#22c55e" />
-      {filtered.length === 0 && (
+      <GroupSection label="To Do"       items={grouped.todo}        color="#94a3b8" />
+      <GroupSection label="In Review"   items={grouped.review}      color="#8b5cf6" />
+      <GroupSection label="Done"        items={grouped.done}        color="#22c55e" />
+      {!loading && !initialized ? null : filtered.length === 0 && initialized && !loading && (
         <div className="text-center py-16">
           <CheckSquare className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-3" />
           <p className="font-medium text-[var(--text-primary)]">No tasks found</p>

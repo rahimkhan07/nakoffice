@@ -1,23 +1,36 @@
 @import "tailwindcss";
 
 /* =============================================
-   VIRTOFFICE – Design Tokens (Tailwind v4 @theme)
+   NAK DIGITAL OFFICE – Design Tokens
+   Brand: Deep Navy #0a2540 | Gold #d4a017
    ============================================= */
 @theme inline {
-  /* Brand palette */
-  --color-brand-50:  #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
-  --color-brand-900: #1e3a8a;
-  --color-brand-950: #172554;
+  /* ── NAK Brand palette ── */
+  --color-brand-50:   #f0f4ff;
+  --color-brand-100:  #dce6fb;
+  --color-brand-200:  #bacef7;
+  --color-brand-300:  #85aaf0;
+  --color-brand-400:  #527ee6;
+  --color-brand-500:  #1a73e8;
+  --color-brand-600:  #1557c0;
+  --color-brand-700:  #0f3e8c;
+  --color-brand-800:  #0a2d6b;
+  --color-brand-900:  #0a2540;
+  --color-brand-950:  #061020;
 
-  /* Surface / neutral */
+  /* ── NAK Gold accent ── */
+  --color-gold-50:    #fdf8e7;
+  --color-gold-100:   #faf0c8;
+  --color-gold-200:   #f5dc8b;
+  --color-gold-300:   #edc84e;
+  --color-gold-400:   #d4a017;
+  --color-gold-500:   #b8870f;
+  --color-gold-600:   #946a09;
+  --color-gold-700:   #6e4e08;
+  --color-gold-800:   #4a340a;
+  --color-gold-900:   #2a1e07;
+
+  /* ── Surface / neutral ── */
   --color-surface-0:   #ffffff;
   --color-surface-50:  #f8fafc;
   --color-surface-100: #f1f5f9;
@@ -31,77 +44,82 @@
   --color-surface-900: #0f172a;
   --color-surface-950: #020617;
 
-  /* Status colours */
+  /* ── Status ── */
   --color-status-available: #22c55e;
   --color-status-away:      #f59e0b;
   --color-status-busy:      #ef4444;
   --color-status-offline:   #6b7280;
 
-  /* Semantic */
+  /* ── Semantic ── */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error:   #ef4444;
-  --color-info:    #3b82f6;
+  --color-info:    #1a73e8;
 
-  /* Fonts */
+  /* ── Fonts ── */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Custom radii */
+  /* ── Radii ── */
   --radius-xl:  0.75rem;
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
 
-  /* Shadows (design-system) */
+  /* ── Shadows ── */
   --shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
-  --shadow-card-hover: 0 4px 16px 0 rgb(0 0 0 / 0.10);
-  --shadow-modal:      0 20px 60px -10px rgb(0 0 0 / 0.25);
+  --shadow-card-hover: 0 4px 20px 0 rgb(10 37 64 / 0.15);
+  --shadow-modal:      0 20px 60px -10px rgb(0 0 0 / 0.30);
 }
 
 /* =============================================
    CSS Custom Properties – light / dark mode
+   NAK Digital brand uses deep navy sidebar
    ============================================= */
 :root {
-  --bg-primary:    #ffffff;
-  --bg-secondary:  #f8fafc;
-  --bg-tertiary:   #f1f5f9;
-  --bg-elevated:   #ffffff;
-  --border:        #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --text-primary:  #0f172a;
-  --text-secondary:#475569;
-  --text-muted:    #94a3b8;
-  --sidebar-bg:    #0f172a;
-  --sidebar-text:  #cbd5e1;
-  --sidebar-active:#3b82f6;
-  --glass-bg:      rgba(255,255,255,0.7);
-  --glass-border:  rgba(255,255,255,0.3);
+  --bg-primary:     #ffffff;
+  --bg-secondary:   #f6f8fc;
+  --bg-tertiary:    #edf1f7;
+  --bg-elevated:    #ffffff;
+  --border:         #dde3ee;
+  --border-subtle:  #edf1f7;
+  --text-primary:   #0a2540;
+  --text-secondary: #3d5a80;
+  --text-muted:     #8fa8c8;
+  --sidebar-bg:     #061020;
+  --sidebar-text:   #8fa8c8;
+  --sidebar-active: #1a73e8;
+  --nak-navy:       #0a2540;
+  --nak-gold:       #d4a017;
+  --nak-blue:       #1a73e8;
+  --glass-bg:       rgba(255,255,255,0.75);
+  --glass-border:   rgba(10,37,64,0.12);
 }
 
 .dark {
-  --bg-primary:    #0f172a;
-  --bg-secondary:  #1e293b;
-  --bg-tertiary:   #334155;
-  --bg-elevated:   #1e293b;
-  --border:        #334155;
-  --border-subtle: #1e293b;
-  --text-primary:  #f1f5f9;
-  --text-secondary:#94a3b8;
-  --text-muted:    #64748b;
-  --sidebar-bg:    #020617;
-  --sidebar-text:  #94a3b8;
-  --sidebar-active:#3b82f6;
-  --glass-bg:      rgba(15,23,42,0.7);
-  --glass-border:  rgba(255,255,255,0.08);
+  --bg-primary:     #061020;
+  --bg-secondary:   #0d1f36;
+  --bg-tertiary:    #142840;
+  --bg-elevated:    #0d1f36;
+  --border:         #1e3554;
+  --border-subtle:  #0d1f36;
+  --text-primary:   #e8f0fe;
+  --text-secondary: #8fa8c8;
+  --text-muted:     #4a6580;
+  --sidebar-bg:     #030d1a;
+  --sidebar-text:   #6a8aaa;
+  --sidebar-active: #1a73e8;
+  --nak-navy:       #0a2540;
+  --nak-gold:       #d4a017;
+  --nak-blue:       #4a9eff;
+  --glass-bg:       rgba(6,16,32,0.80);
+  --glass-border:   rgba(255,255,255,0.06);
 }
 
 /* =============================================
    Base resets
    ============================================= */
 *, *::before, *::after { box-sizing: border-box; }
-
 html { height: 100%; scroll-behavior: smooth; }
-
 body {
   height: 100%;
   background-color: var(--bg-primary);
@@ -120,29 +138,29 @@ body {
 ::-webkit-scrollbar-thumb:hover{ background: var(--text-muted); }
 
 /* =============================================
-   Focus ring
+   Focus ring – NAK blue
    ============================================= */
 :focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--nak-blue);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 /* =============================================
-   Glass morphism helper
+   Glassmorphism
    ============================================= */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
 }
 
 /* =============================================
-   Text gradient
+   NAK Digital text gradient (navy → gold)
    ============================================= */
 .text-gradient {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1a73e8 0%, #d4a017 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -152,7 +170,7 @@ body {
    Animations
    ============================================= */
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 3.5s ease-in-out infinite;
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
@@ -160,59 +178,73 @@ body {
 }
 
 .animate-pulse-ring {
-  animation: pulse-ring 2s ease-out infinite;
+  animation: pulse-ring 2.2s ease-out infinite;
 }
 @keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0   rgba(59,130,246,0.4); }
-  70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0);   }
-  100% { box-shadow: 0 0 0 0   rgba(59,130,246,0);   }
+  0%   { box-shadow: 0 0 0 0   rgba(26,115,232,0.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(26,115,232,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(26,115,232,0);   }
+}
+
+/* NAK gold pulse – used on special CTAs */
+.animate-gold-ring {
+  animation: gold-ring 2.2s ease-out infinite;
+}
+@keyframes gold-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(212,160,23,0.5); }
+  70%  { box-shadow: 0 0 0 12px rgba(212,160,23,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(212,160,23,0);   }
 }
 
 /* =============================================
-   Virtual office – subtle dot grid
+   Virtual office grid
    ============================================= */
 .office-grid {
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(10,37,64,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10,37,64,0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.dark .office-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
 }
 
 /* =============================================
-   Kanban drag-over ring  (valid plain CSS)
+   Kanban drag-over ring
    ============================================= */
 .kanban-over {
-  box-shadow: 0 0 0 2px #3b82f6;
+  box-shadow: 0 0 0 2px #1a73e8;
 }
 
 /* =============================================
-   Toggle switch  (used in settings)
+   Toggle switch (settings)
    ============================================= */
 .toggle-track {
   position: relative;
   display: inline-block;
-  width: 2.5rem;   /* 40 px */
-  height: 1.375rem; /* 22 px */
+  width: 2.5rem;
+  height: 1.375rem;
   border-radius: 9999px;
   transition: background-color 0.2s;
   flex-shrink: 0;
   cursor: pointer;
 }
-.toggle-track-on  { background-color: #3b82f6; }
+.toggle-track-on  { background-color: #1a73e8; }
 .toggle-track-off { background-color: var(--bg-tertiary); border: 1px solid var(--border); }
-
 .toggle-knob {
   position: absolute;
-  top: 0.1875rem;   /* 3 px */
+  top: 0.1875rem;
   left: 0.1875rem;
-  width: 1rem;      /* 16 px */
+  width: 1rem;
   height: 1rem;
   border-radius: 9999px;
   background: white;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.2s;
 }
-.toggle-knob-on  { transform: translateX(1.125rem); /* 18 px */ }
+.toggle-knob-on  { transform: translateX(1.125rem); }
 .toggle-knob-off { transform: translateX(0); }
 
 /* =============================================
@@ -222,6 +254,21 @@ body {
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .card-hover:hover {
-  box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.12);
+  box-shadow: 0 8px 28px -4px rgba(10,37,64,0.14);
   transform: translateY(-2px);
+}
+
+/* =============================================
+   NAK Sidebar gradient
+   ============================================= */
+.nak-sidebar-gradient {
+  background: linear-gradient(180deg, #061020 0%, #0a1e35 60%, #061020 100%);
+}
+
+/* =============================================
+   NAK Gold divider
+   ============================================= */
+.nak-gold-bar {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a017, transparent);
 }

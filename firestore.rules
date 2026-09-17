@@ -1,0 +1,139 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ───────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function belongsToCompany(companyId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.companyId == companyId;
+    }
+
+    function isOwnerOrAdmin(companyId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['company_owner', 'company_admin', 'super_admin'] &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.companyId == companyId;
+    }
+
+    // ── Company ────────────────────────────────────────────────
+    match /companies/{companyId} {
+      allow read:  if belongsToCompany(companyId);
+      allow write: if isOwnerOrAdmin(companyId);
+    }
+
+    // ── Users ──────────────────────────────────────────────────
+    match /users/{userId} {
+      // Anyone signed in can read users in their company
+      allow read: if isSignedIn();
+      // Users can update their own doc; admins can update anyone
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        request.auth.uid == userId ||
+        isOwnerOrAdmin(resource.data.companyId)
+      );
+      allow delete: if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Departments ────────────────────────────────────────────
+    match /departments/{deptId} {
+      allow read:   if isSignedIn();
+      allow create: if isOwnerOrAdmin(request.resource.data.companyId);
+      allow update: if isOwnerOrAdmin(resource.data.companyId);
+      allow delete: if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Projects ───────────────────────────────────────────────
+    match /projects/{projectId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Tasks ──────────────────────────────────────────────────
+    match /tasks/{taskId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // ── Meetings ───────────────────────────────────────────────
+    match /meetings/{meetingId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // ── Channels ───────────────────────────────────────────────
+    match /channels/{channelId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Messages ───────────────────────────────────────────────
+    match /messages/{messageId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.senderId;
+      allow update: if isSignedIn() && request.auth.uid == resource.data.senderId;
+      allow delete: if isSignedIn() && (
+        request.auth.uid == resource.data.senderId ||
+        isOwnerOrAdmin(resource.data.companyId)
+      );
+    }
+
+    // ── Files ──────────────────────────────────────────────────
+    match /files/{fileId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // ── Announcements ──────────────────────────────────────────
+    match /announcements/{annId} {
+      allow read:   if isSignedIn();
+      allow create: if isOwnerOrAdmin(request.resource.data.companyId);
+      allow update: if isOwnerOrAdmin(resource.data.companyId);
+      allow delete: if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Notifications ──────────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read:   if isSignedIn() && request.auth.uid == resource.data.userId;
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && request.auth.uid == resource.data.userId;
+      allow delete: if isSignedIn() && request.auth.uid == resource.data.userId;
+    }
+
+    // ── Calendar Events ────────────────────────────────────────
+    match /calendarEvents/{eventId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // ── Virtual Rooms ──────────────────────────────────────────
+    match /virtualRooms/{roomId} {
+      allow read:   if isSignedIn();
+      allow write:  if isOwnerOrAdmin(resource.data.companyId);
+    }
+
+    // ── Activity Log ───────────────────────────────────────────
+    match /activityLog/{logId} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

@@ -18,16 +18,27 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'VirtOffice – Your Company, Your Office, Anywhere',
-    template: '%s | VirtOffice',
+    default: 'NAK Digital Office',
+    template: '%s | NAK Digital',
   },
   description:
-    'Build a virtual workplace where your team can collaborate, communicate and work together from anywhere.',
-  keywords: ['virtual office', 'remote work', 'team collaboration', 'SaaS'],
+    'NAK Digital internal virtual office - collaborate, communicate and manage projects from anywhere.',
+  keywords: ['NAK Digital', 'virtual office', 'team collaboration', 'remote work', 'digital agency'],
+  authors: [{ name: 'NAK Digital' }],
+  creator: 'NAK Digital',
   openGraph: {
-    type: 'website',
-    title: 'VirtOffice',
-    description: 'Your Company. Your Office. Anywhere.',
+    type:        'website',
+    title:       'NAK Digital Office',
+    description: 'Your team. Your office. Anywhere.',
+    siteName:    'NAK Digital Office',
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'NAK Digital Office',
+    description: 'Your team. Your office. Anywhere.',
+  },
+  icons: {
+    icon: '/favicon.ico',
   },
 };
 

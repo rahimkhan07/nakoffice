@@ -5,18 +5,33 @@ import Link from 'next/link';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { forgotPassword } from '@/lib/firebase-auth';
+import toast from 'react-hot-toast';
 
 export function ForgotPasswordForm() {
-  const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
+  const [email,   setEmail]   = useState('');
+  const [sent,    setSent]    = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    setSent(true);
-    setLoading(false);
+    try {
+      await forgotPassword(email);
+      setSent(true);
+      toast.success('Reset email sent!');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg.includes('user-not-found')) {
+        setError('No account found with this email address.');
+      } else {
+        setError('Failed to send reset email. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,7 +47,7 @@ export function ForgotPasswordForm() {
               We sent a password reset link to <strong>{email}</strong>
             </p>
             <Link href="/login" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              Back to sign in
+              ← Back to sign in
             </Link>
           </div>
         ) : (
@@ -43,15 +58,31 @@ export function ForgotPasswordForm() {
                 Enter your email and we&apos;ll send you a reset link.
               </p>
             </div>
+
+            {error && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-400">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
-              <Input label="Email address" type="email" value={email}
+              <Input
+                label="Email address"
+                type="email"
+                value={email}
                 onChange={e => setEmail(e.target.value)}
                 leftIcon={<Mail className="w-4 h-4" />}
-                placeholder="you@company.com" required />
-              <Button type="submit" fullWidth loading={loading}>Send reset link</Button>
+                placeholder="you@company.com"
+                required
+              />
+              <Button type="submit" fullWidth loading={loading}>
+                Send reset link
+              </Button>
             </form>
+
             <div className="mt-4 text-center">
-              <Link href="/login" className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+              <Link href="/login"
+                className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
                 <ArrowLeft className="w-3.5 h-3.5" /> Back to sign in
               </Link>
             </div>
