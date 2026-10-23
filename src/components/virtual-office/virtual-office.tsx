@@ -210,7 +210,7 @@ function EmployeeProfilePopup({
 /* ─── Main virtual office ────────────────────────────── */
 export function VirtualOffice() {
   const router   = useRouter();
-  const { currentUser, users, virtualRooms, updateUserPosition, setActiveChannel, channels } = useAppStore();
+  const { currentUser, company, users, virtualRooms, updateUserPosition, setActiveChannel, channels } = useAppStore();
 
   const canvasRef    = useRef<HTMLDivElement>(null);
   const pressedKeys  = useRef<Set<string>>(new Set());
@@ -326,7 +326,9 @@ export function VirtualOffice() {
         <div className="flex items-center gap-2">
           <span className="text-xl">🏢</span>
           <div>
-            <p className="text-sm font-semibold text-[var(--text-primary)] leading-tight">NAK Digital HQ</p>
+            <p className="text-sm font-semibold text-[var(--text-primary)] leading-tight">
+              {company.officeName || company.name || 'Virtual Office'}
+            </p>
             <p className="text-xs text-[var(--text-muted)]">
               {myRoom ? `📍 ${myRoom.icon} ${myRoom.name}` : '📍 Common Area'}
               {' · '}{users.filter(u => u.isOnline).length} online

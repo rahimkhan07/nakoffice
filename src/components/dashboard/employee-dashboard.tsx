@@ -29,7 +29,7 @@ function getGreeting(): string {
 
 /* ─── New Task Modal ─────────────────────────────────────────── */
 function NewTaskModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { addTask, currentUser, projects, users } = useAppStore();
+  const { addTask, currentUser, company, projects, users } = useAppStore();
   const [form, setForm] = useState({
     title: '', description: '', projectId: projects[0]?.id ?? '',
     priority: 'medium' as Task['priority'], dueDate: '', assigneeId: currentUser?.id ?? '',
@@ -39,12 +39,12 @@ function NewTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
     if (!form.title.trim()) { toast.error('Please enter a task title'); return; }
     addTask({
       id: generateId(),
-      companyId: 'company-1',
+      companyId: company.id,
       projectId: form.projectId,
       title: form.title.trim(),
       description: form.description,
       assigneeId: form.assigneeId || undefined,
-      reporterId: currentUser?.id ?? 'user-1',
+      reporterId: currentUser?.id ?? '',
       status: 'todo',
       priority: form.priority,
       dueDate: form.dueDate || undefined,
@@ -124,7 +124,7 @@ function NewTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
 
 /* ─── Schedule Meeting Modal ─────────────────────────────────── */
 function ScheduleMeetingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { addMeeting, addCalendarEvent, currentUser, users } = useAppStore();
+  const { addMeeting, addCalendarEvent, currentUser, company, users } = useAppStore();
   const [form, setForm] = useState({
     title: '', description: '',
     date: new Date().toISOString().split('T')[0],
@@ -138,20 +138,20 @@ function ScheduleMeetingModal({ open, onClose }: { open: boolean; onClose: () =>
     const id    = generateId();
 
     addMeeting({
-      id, companyId: 'company-1',
+      id, companyId: company.id,
       title: form.title, description: form.description,
-      hostId: currentUser?.id ?? 'user-1',
-      participantIds: [currentUser?.id ?? 'user-1'],
+      hostId: currentUser?.id ?? '',
+      participantIds: [currentUser?.id ?? ''].filter(Boolean),
       startTime: start, endTime: end,
       status: 'scheduled',
       roomUrl: `/meeting/office/${id}`,
       createdAt: new Date().toISOString(),
     });
     addCalendarEvent({
-      id: generateId(), companyId: 'company-1',
+      id: generateId(), companyId: company.id,
       title: form.title, startDate: start, endDate: end,
-      type: 'meeting', color: '#3b82f6',
-      creatorId: currentUser?.id ?? 'user-1',
+      type: 'meeting', color: '#1a73e8',
+      creatorId: currentUser?.id ?? '',
     });
     toast.success('Meeting scheduled!');
     onClose();

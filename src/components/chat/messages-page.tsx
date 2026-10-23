@@ -79,7 +79,7 @@ function ChannelItem({ channel, active, currentUserId, users, onSelect }: Channe
 function ChannelList() {
   const {
     channels, activeChannelId, setActiveChannel, markChannelRead,
-    currentUser, users, addChannel,
+    currentUser, company, users, addChannel,
   } = useAppStore();
 
   const [search,     setSearch]     = useState('');
@@ -98,12 +98,12 @@ function ChannelList() {
   const handleCreateChannel = () => {
     if (!newChan.name.trim()) { toast.error('Channel name required'); return; }
     addChannel({
-      id:        generateId(),
-      companyId: 'company-1',
-      name:      newChan.name.trim(),
-      type:      newChan.type,
-      memberIds: [currentUser?.id ?? 'user-1'],
-      createdAt: new Date().toISOString(),
+      id:          generateId(),
+      companyId:   company.id,
+      name:        newChan.name.trim(),
+      type:        newChan.type,
+      memberIds:   [currentUser?.id ?? ''].filter(Boolean),
+      createdAt:   new Date().toISOString(),
       unreadCount: 0,
     });
     toast.success(`Channel #${newChan.name} created`);

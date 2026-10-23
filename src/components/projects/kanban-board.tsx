@@ -98,7 +98,7 @@ function TaskCard({ task, onDragStart }: { task: Task; onDragStart: (id: string)
 function AddTaskModal({ open, onClose, status, projectId }: {
   open: boolean; onClose: () => void; status: Task['status']; projectId?: string;
 }) {
-  const { addTask, currentUser, users, projects } = useAppStore();
+  const { addTask, currentUser, company, users, projects } = useAppStore();
   const [form, setForm] = useState({
     title: '', description: '', assigneeId: '', priority: 'medium' as Task['priority'],
     dueDate: '', projectId: projectId ?? '',
@@ -108,12 +108,12 @@ function AddTaskModal({ open, onClose, status, projectId }: {
     if (!form.title.trim()) return;
     addTask({
       id: generateId(),
-      companyId: 'company-1',
+      companyId: company.id,
       projectId: form.projectId || projectId || projects[0]?.id,
       title: form.title,
       description: form.description,
       assigneeId: form.assigneeId || undefined,
-      reporterId: currentUser?.id ?? 'user-1',
+      reporterId: currentUser?.id ?? '',
       status,
       priority: form.priority,
       dueDate: form.dueDate || undefined,

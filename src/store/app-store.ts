@@ -13,9 +13,9 @@ import type {
 } from '@/types';
 import * as FS from '@/lib/firestore';
 
-// Default empty company (never shown — replaced by Firestore data)
+// Default empty company (never shown — replaced by Firestore data on auth)
 const emptyCompany: Company = {
-  id:          'company-1',
+  id:          process.env.NEXT_PUBLIC_COMPANY_ID ?? 'company-1',
   name:        '',
   slug:        '',
   email:       '',
@@ -23,13 +23,13 @@ const emptyCompany: Company = {
   size:        '',
   country:     '',
   timezone:    'UTC',
-  brandColor:  '#3b82f6',
-  accentColor: '#8b5cf6',
+  brandColor:  '#1a73e8',
+  accentColor: '#d4a017',
   plan:        'free',
   ownerId:     '',
   createdAt:   '',
   storageUsed: 0,
-  storageLimit: 10_737_418_240,
+  storageLimit: 107_374_182_400,
 };
 
 interface AppState {
@@ -56,6 +56,8 @@ interface AppState {
   updateUserStatus: (userId: string, status: User['status']) => void;
   updateUserPosition: (userId: string, pos: { x: number; y: number }) => void;
   updateCurrentUser:  (updates: Partial<User>) => void;
+  updateUser:       (id: string, updates: Partial<User>) => void;
+  deleteUser:       (id: string) => void;
 
   // ── Departments ──────────────────────────────
   departments:      Department[];
@@ -189,6 +191,21 @@ export const useAppStore = create<AppState>()(
         });
         const uid = get().currentUser?.id;
         if (uid) FS.updateUser(uid, updates).catch(console.error);
+      },
+      // Update any user (admin action) — syncs to Firestore + local store
+      updateUser: (id, updates) => {
+        set(s => ({
+          users: s.users.map(u => u.id === id ? { ...u, ...updates } : u),
+          currentUser: s.currentUser?.id === id
+            ? { ...s.currentUser, ...updates }
+            : s.currentUser,
+        }));
+        FS.updateUser(id, updates).catch(console.error);
+      },
+      // Hard-delete a user from Firestore + remove from local list
+      deleteUser: (id) => {
+        set(s => ({ users: s.users.filter(u => u.id !== id) }));
+        FS.deleteUser(id).catch(console.error);
       },
 
       // ── Departments ──────────────────────────

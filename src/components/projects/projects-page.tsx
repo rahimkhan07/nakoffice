@@ -78,7 +78,7 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 function NewProjectModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { addProject, currentUser, departments } = useAppStore();
+  const { addProject, currentUser, company, departments } = useAppStore();
   const [form, setForm] = useState({
     name: '', description: '', client: '',
     departmentId: '', deadline: '', priority: 'medium' as const,
@@ -88,13 +88,13 @@ function NewProjectModal({ open, onClose }: { open: boolean; onClose: () => void
     if (!form.name.trim()) return;
     addProject({
       id: `proj-${Date.now()}`,
-      companyId: 'company-1',
+      companyId: company.id,
       name: form.name,
       description: form.description,
       client: form.client,
       departmentId: form.departmentId,
-      managerId: currentUser?.id ?? 'user-1',
-      memberIds: [currentUser?.id ?? 'user-1'],
+      managerId: currentUser?.id ?? '',
+      memberIds: [currentUser?.id ?? ''].filter(Boolean),
       startDate: new Date().toISOString(),
       deadline: form.deadline || new Date(Date.now() + 7776000000).toISOString(),
       status: 'planning',

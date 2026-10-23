@@ -15,14 +15,14 @@ const DEPT_COLORS = ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f59e0b','#06b6d4'
 const DEPT_ICONS  = ['⚙️','🎨','📣','💼','👥','💰','🔬','🚀','📊'];
 
 export function DepartmentsPage() {
-  const { departments, users, projects, addDepartment } = useAppStore();
+  const { departments, users, projects, addDepartment, company } = useAppStore();
   const [modal, setModal] = useState(false);
   const [form, setForm]   = useState({ name:'', description:'', icon:'⚙️', color:'#3b82f6' });
 
   const handleAdd = () => {
     if (!form.name.trim()) return;
     addDepartment({
-      id: `dept-${Date.now()}`, companyId:'company-1',
+      id: `dept-${Date.now()}`, companyId: company.id,
       name: form.name, description: form.description,
       icon: form.icon, color: form.color,
       memberCount: 0, createdAt: new Date().toISOString(),

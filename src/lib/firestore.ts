@@ -84,6 +84,9 @@ export async function setUser(user: User): Promise<void> {
 export async function updateUser(id: string, updates: Partial<User>): Promise<void> {
   await updateDoc(doc(db, COLLECTIONS.USERS, id), clean(updates));
 }
+export async function deleteUser(id: string): Promise<void> {
+  await deleteDoc(doc(db, COLLECTIONS.USERS, id));
+}
 // ✅ Simple where — no composite index needed
 export function listenUsers(companyId: string, cb: (u: User[]) => void): Unsubscribe {
   const q = query(

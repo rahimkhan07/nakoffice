@@ -41,7 +41,7 @@ function EventPill({ event }: { event: CalendarEvent }) {
 }
 
 export function CalendarPage() {
-  const { calendarEvents, addCalendarEvent, meetings, currentUser } = useAppStore();
+  const { calendarEvents, addCalendarEvent, meetings, currentUser, company } = useAppStore();
   const [view,      setView]      = useState<ViewMode>('month');
   const [current,   setCurrent]   = useState(new Date());
   const [modal,     setModal]     = useState(false);
@@ -77,7 +77,7 @@ export function CalendarPage() {
     if (!newEvent.title.trim() || !newEvent.date) return;
     addCalendarEvent({
       id: generateId(),
-      companyId: 'company-1',
+      companyId: company.id,
       title: newEvent.title,
       description: newEvent.description,
       startDate: newEvent.date + (newEvent.time ? `T${newEvent.time}:00Z` : 'T00:00:00Z'),
@@ -85,7 +85,7 @@ export function CalendarPage() {
       allDay: !newEvent.time,
       type: newEvent.type as CalendarEvent['type'],
       color: typeConfig[newEvent.type]?.color,
-      creatorId: currentUser?.id ?? 'user-1',
+      creatorId: currentUser?.id ?? '',
     });
     setModal(false);
     setNewEvent({ title:'', type:'event', date:'', time:'', endDate:'', endTime:'', description:'' });

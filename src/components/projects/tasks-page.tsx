@@ -54,7 +54,7 @@ function TaskRow({ task }: { task: Task }) {
 }
 
 export function TasksPage() {
-  const { tasks, projects, users, currentUser, addTask, initialized, loading } = useAppStore();
+  const { tasks, projects, users, currentUser, company, addTask, initialized, loading } = useAppStore();
   const [search, setSearch] = useState('');
   const [statusF, setStatusF] = useState('');
   const [priorityF, setPriorityF] = useState('');
@@ -81,11 +81,11 @@ export function TasksPage() {
   const handleAdd = () => {
     if (!form.title.trim()) return;
     addTask({
-      id: generateId(), companyId: 'company-1',
+      id: generateId(), companyId: company.id,
       projectId: form.projectId || projects[0]?.id,
       title: form.title, description: '',
       assigneeId: form.assigneeId || undefined,
-      reporterId: currentUser?.id ?? 'user-1',
+      reporterId: currentUser?.id ?? '',
       status: 'todo', priority: form.priority,
       dueDate: form.dueDate || undefined,
       createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), order: Date.now(),
